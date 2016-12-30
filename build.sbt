@@ -12,6 +12,8 @@ import scala.xml.{Elem => XElem}
 val slickVersion = "3.1.1"
 
 val json4s = "org.json4s" %% "json4s-native" % "3.4.2"
+// for syntax highlighting
+val ammoniteRepl = "com.lihaoyi" % "ammonite-repl_2.11.8" % "0.8.1"
 
 // testing
 val scalatest = "org.scalatest" %% "scalatest" % "3.0.1" % "test"
@@ -100,7 +102,7 @@ lazy val plugin = (project in file("plugin"))
     crossScalaVersions := Seq(scalaVersion.value, "2.10.6", "2.12.0"),
     libraryDependencies ++= Seq(
       "org.scala-lang" % "scala-compiler" % scalaVersion.value,
-      scalatest, scalacheck, json4s),
+      scalatest, scalacheck, json4s, ammoniteRepl),
     pomPostProcess := { (node: XNode) =>
       new RuleTransformer(removeDep("org.json4s", "json4s-native")).transform(node).head
     },
@@ -137,7 +139,8 @@ lazy val tests = (project in file("tests"))
       json4s, scalatest,
       "com.typesafe.akka" %% "akka-http" % "10.0.0",
       "com.softwaremill.macwire" %% "macros" % "2.2.2" % "provided",
-      "com.typesafe.slick" %% "slick" % slickVersion
+      "com.typesafe.slick" %% "slick" % slickVersion,
+      ammoniteRepl
     ),
     // during tests, read from the local repository, if at all available
     scalacOptions ++= List(s"-Xplugin:${pluginJar.value.getAbsolutePath}", "-P:clippy:url=http://localhost:9000"),
